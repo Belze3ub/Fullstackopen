@@ -1,25 +1,21 @@
 import axios from 'axios';
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const getAll = () => {
-  return axios
-    .get('http://localhost:3000/persons')
-    .then((response) => response.data);
+  return axios.get(baseURL).then((response) => response.data);
 };
 
 const create = (newObject) => {
-  return axios
-    .post('http://localhost:3000/persons', newObject)
-    .then((response) => response.data);
+  return axios.post(baseURL, newObject).then((response) => response.data);
 };
 
 const deletePerson = (id) => {
-  axios.
-    delete(`http://localhost:3000/persons/${id}`)
+  axios.delete(`${baseURL}/${id}`);
 }
 
 const update = (id, newObject) => {
   return axios
-    .put(`http://localhost:3000/persons/${id}`, newObject)
+    .put(`${baseURL}/${id}`, newObject)
     .then((response) => response.data);
 };
 
