@@ -19,29 +19,6 @@ app.use(morgan(':method :url :response-time ms :body'));
 
 app.use(cors());
 
-// let persons = [
-//   {
-//     id: 1,
-//     name: 'Arto Hellas',
-//     number: '040-123456',
-//   },
-//   {
-//     id: 2,
-//     name: 'Ada Lovelace',
-//     number: '39-44-5323523',
-//   },
-//   {
-//     id: 3,
-//     name: 'Dan Abramov',
-//     number: '12-43-234345',
-//   },
-//   {
-//     id: 4,
-//     name: 'Mary Poppendieck',
-//     number: '39-23-6423122',
-//   },
-// ];
-
 app.get('/api/persons', (request, response) => {
   // response.json(persons);
   Person.find({}).then((persons) => {
@@ -59,10 +36,6 @@ app.get('/api/persons/:id', (request, response, next) => {
       }
     })
     .catch((error) => next(error));
-  // const personId = Number(request.params.id);
-  // const person = persons.find((person) => person.id === personId);
-  // if (person) response.json(person);
-  // else response.status(404).end();
 });
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -71,14 +44,10 @@ app.delete('/api/persons/:id', (request, response, next) => {
       response.status(204).end();
     })
     .catch((error) => next(error));
-  // const personId = Number(request.params.id);
-  // persons = persons.filter((person) => person.id !== personId);
-  // response.status(204).end();
 });
 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body;
-  // const exists = persons.map((person) => person.name).includes(body.name);
 
   if (!body.name) {
     return response.status(400).json({
@@ -89,11 +58,6 @@ app.post('/api/persons', (request, response, next) => {
       error: 'Number is required',
     });
   }
-  // } else if (exists) {
-  //   return response.status(401).json({
-  //     error: 'Name is already in a phonebook',
-  //   });
-  // }
 
   const person = new Person({
     name: body.name,
