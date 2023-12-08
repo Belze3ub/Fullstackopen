@@ -72,7 +72,11 @@ const App = () => {
                 setMessage('');
               }, 3000);
             } else {
-              console.error('Unexpected error:', error.message);
+              const newMessage = {
+                content: error.response.data.error,
+                type: 'bad',
+              };
+              setMessage(newMessage);
             }
           });
     } else {
@@ -88,6 +92,12 @@ const App = () => {
         setTimeout(() => {
           setMessage('');
         }, 3000);
+      }).catch(error => {
+        const newMessage = {
+          content: error.response.data.error,
+          type: 'bad',
+        };
+        setMessage(newMessage)
       });
     }
   };
