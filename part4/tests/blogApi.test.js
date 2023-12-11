@@ -3,7 +3,12 @@ const app = require('../app');
 const mongoose = require('mongoose');
 const api = supertest(app);
 const Blog = require('../models/blog');
-const { initialBlogs, nonExistingId, blogsInDb } = require('./testHelper');
+const {
+  initialBlogs,
+  nonExistingId,
+  blogsInDb,
+  getToken,
+} = require('./testHelper');
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -14,23 +19,33 @@ beforeEach(async () => {
 });
 
 test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs');
+  const token = await getToken();
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', `Bearer ${token}`);
   expect(response.body).toHaveLength(initialBlogs.length);
 });
 
 test('a specific blog is within the returned blogs', async () => {
-  const response = await api.get('/api/blogs');
+  const token = await getToken();
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', `Bearer ${token}`);
   const title = response.body.map((blog) => blog.title);
   expect(title).toContain('test');
 });
 
 test('unique identifier is named "id"', async () => {
-  const response = await api.get('/api/blogs');
+  const token = await getToken();
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', `Bearer ${token}`);
   const blog = response.body[0];
   expect(Object.keys(blog)).toContain('id');
 });
 
 test('valid blog post can be added', async () => {
+  const token = await getToken();
   const newBlog = {
     title: 'newBlog',
     author: 'newBlog',
@@ -39,7 +54,7 @@ test('valid blog post can be added', async () => {
   };
   await api
     .post('/api/blogs')
-    .send(newBlog)
+    .send(newBlog).set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/);
   const blogs = await blogsInDb();
@@ -50,6 +65,7 @@ test('valid blog post can be added', async () => {
 });
 
 test('if blog don\'t have "likes" property then likes equals 0', async () => {
+  const token = await getToken();
   const newBlog = {
     title: 'newBlog',
     author: 'newBlog',
@@ -60,49 +76,65 @@ test('if blog don\'t have "likes" property then likes equals 0', async () => {
     : newBlog;
   await api
     .post('/api/blogs')
-    .send(newBlogCheck)
+    .send(newBlogCheck).set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/);
-  const response = await api.get('/api/blogs');
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', `Bearer ${token}`);
   const likes = response.body.map((blog) => blog.likes);
   expect(likes[likes.length - 1]).toBe(0);
 });
 
 test('blog without title is not added', async () => {
+  const token = await getToken();
   const newBlog = {
     author: 'newBlog',
     url: 'http://newBlog.com',
     likes: 1,
   };
-  await api.post('/api/blogs').send(newBlog).expect(400);
+  await api.post('/api/blogs').send(newBlog).set('Authorization', `Bearer ${token}`).expect(400);
   const blogs = await blogsInDb();
   expect(blogs).toHaveLength(initialBlogs.length);
 });
 
 test('blog without url is not added', async () => {
+  const token = await getToken();
   const newBlog = {
     title: 'newBlog',
     author: 'newBlog',
     likes: 1,
   };
-  await api.post('/api/blogs').send(newBlog).expect(400);
+  await api.post('/api/blogs').send(newBlog).set('Authorization', `Bearer ${token}`).expect(400);
   const blogs = await blogsInDb();
   expect(blogs).toHaveLength(initialBlogs.length);
 });
 
 test('blog post can be deleted', async () => {
-  const blogsAtStart = await blogsInDb();
-  const blogToDelete = blogsAtStart[0];
+  const token = await getToken();
+  const newBlog = {
+    title: 'Test Blog',
+    author: 'Test Author',
+    url: 'http://test.com',
+    likes: 0,
+  };
+  const response = await api
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
+    .send(newBlog)
+    .expect(201);
+  const blogToDelete = response.body;
 
-  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+  await api.delete(`/api/blogs/${blogToDelete.id}`).set('Authorization', `Bearer ${token}`).expect(204);
 
   const blogsAtEnd = await blogsInDb();
-  expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1);
+  expect(blogsAtEnd).toHaveLength(initialBlogs.length);
   const titles = blogsAtEnd.map((blog) => blog.title);
   expect(titles).not.toContain(blogToDelete.title);
 });
 
 test('blog post can be updated', async () => {
+  const token = await getToken();
   const blogsAtStart = await blogsInDb();
   const blogBeforeUpdate = blogsAtStart[0];
 
@@ -115,7 +147,7 @@ test('blog post can be updated', async () => {
 
   await api
     .put(`/api/blogs/${blogBeforeUpdate.id}`)
-    .send(updatedBlog)
+    .send(updatedBlog).set('Authorization', `Bearer ${token}`)
     .expect(200);
 
   const blogsAtEnd = await blogsInDb();
