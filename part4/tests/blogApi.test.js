@@ -8,6 +8,9 @@ const {
   nonExistingId,
   blogsInDb,
   getToken,
+  favoriteBlog,
+  mostBlogs,
+  mostLikes,
 } = require('./testHelper');
 
 beforeEach(async () => {
@@ -54,7 +57,8 @@ test('valid blog post can be added', async () => {
   };
   await api
     .post('/api/blogs')
-    .send(newBlog).set('Authorization', `Bearer ${token}`)
+    .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/);
   const blogs = await blogsInDb();
@@ -76,7 +80,8 @@ test('if blog don\'t have "likes" property then likes equals 0', async () => {
     : newBlog;
   await api
     .post('/api/blogs')
-    .send(newBlogCheck).set('Authorization', `Bearer ${token}`)
+    .send(newBlogCheck)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/);
   const response = await api
@@ -93,7 +98,11 @@ test('blog without title is not added', async () => {
     url: 'http://newBlog.com',
     likes: 1,
   };
-  await api.post('/api/blogs').send(newBlog).set('Authorization', `Bearer ${token}`).expect(400);
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
+    .expect(400);
   const blogs = await blogsInDb();
   expect(blogs).toHaveLength(initialBlogs.length);
 });
@@ -105,7 +114,11 @@ test('blog without url is not added', async () => {
     author: 'newBlog',
     likes: 1,
   };
-  await api.post('/api/blogs').send(newBlog).set('Authorization', `Bearer ${token}`).expect(400);
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
+    .expect(400);
   const blogs = await blogsInDb();
   expect(blogs).toHaveLength(initialBlogs.length);
 });
@@ -125,7 +138,10 @@ test('blog post can be deleted', async () => {
     .expect(201);
   const blogToDelete = response.body;
 
-  await api.delete(`/api/blogs/${blogToDelete.id}`).set('Authorization', `Bearer ${token}`).expect(204);
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', `Bearer ${token}`)
+    .expect(204);
 
   const blogsAtEnd = await blogsInDb();
   expect(blogsAtEnd).toHaveLength(initialBlogs.length);
@@ -147,13 +163,47 @@ test('blog post can be updated', async () => {
 
   await api
     .put(`/api/blogs/${blogBeforeUpdate.id}`)
-    .send(updatedBlog).set('Authorization', `Bearer ${token}`)
+    .send(updatedBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(200);
 
   const blogsAtEnd = await blogsInDb();
   const blogAfterUpdate = blogsAtEnd[0];
 
   expect(blogAfterUpdate.likes).toBe(updatedBlog.likes);
+});
+
+describe('Favorites blogs', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    for (let blog of initialBlogs) {
+      const blogObject = new Blog(blog);
+      await blogObject.save();
+    }
+  });
+  test('return the most liked blog', async () => {
+    const blogs = await blogsInDb();
+    const favorite = favoriteBlog(blogs);
+    expect(favorite).toEqual(initialBlogs[0]);
+  });
+
+  test('return author with most blogs', async () => {
+    const blogs = await blogsInDb();
+    const mBlogs = mostBlogs(blogs);
+    expect(mBlogs).toEqual({
+      author: 'unknown',
+      blogs: 2,
+    });
+  });
+
+  test('return author with most likes', async () => {
+    const blogs = await blogsInDb();
+    const mLikes = mostLikes(blogs);
+    expect(mLikes).toEqual({
+      author: 'unknown',
+      likes: 16,
+    });
+  });
 });
 
 afterAll(async () => {
