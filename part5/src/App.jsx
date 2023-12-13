@@ -83,6 +83,16 @@ const App = () => {
     }
   };
 
+  const deleteBlog = async (blogId) => {
+    try {
+      await blogService.deleteBlog(blogId);
+      const updatedBlogs = await blogService.getAll();
+      setBlogs(updatedBlogs);
+    } catch (error) {
+      console.log('Error deleting blog', error.message);
+    }
+  }
+
   return (
     <>
       {!user && (
@@ -125,9 +135,17 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm handleCreate={handleCreate} />
           </Togglable>
-          {blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
-          ))}
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                updateBlog={updateBlog}
+                deleteBlog={deleteBlog}
+                username={user.username}
+              />
+            ))}
         </div>
       )}
     </>
