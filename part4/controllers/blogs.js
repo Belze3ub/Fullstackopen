@@ -16,6 +16,7 @@ blogsRouter.get('/:id', async (request, response) => {
 blogsRouter.post('/', userExtractor, async (request, response) => {
   const body = request.body;
   const user = request.user;
+  if (!body.likes) body.likes = 0;
   const newBlog = new Blog({
     title: body.title,
     author: body.author,

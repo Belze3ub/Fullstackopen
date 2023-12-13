@@ -75,20 +75,13 @@ test('if blog don\'t have "likes" property then likes equals 0', async () => {
     author: 'newBlog',
     url: 'http://newBlog.com',
   };
-  const newBlogCheck = !Object.keys(newBlog).includes('likes')
-    ? { ...newBlog, likes: 0 }
-    : newBlog;
-  await api
+  const response = await api
     .post('/api/blogs')
-    .send(newBlogCheck)
     .set('Authorization', `Bearer ${token}`)
+    .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/);
-  const response = await api
-    .get('/api/blogs')
-    .set('Authorization', `Bearer ${token}`);
-  const likes = response.body.map((blog) => blog.likes);
-  expect(likes[likes.length - 1]).toBe(0);
+  expect(response.body.likes).toBe(0);
 });
 
 test('blog without title is not added', async () => {
