@@ -35,6 +35,10 @@ const tokenExtractor = (request, response, next) => {
 const userExtractor = async (request, response, next) => {
   const token = request.token;
 
+  if (request.method === 'GET') {
+    return next();
+  }
+
   if (!token) {
     return response.status(401).json({ error: 'Token is missing or invalid' });
   }
