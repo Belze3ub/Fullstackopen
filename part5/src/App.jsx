@@ -12,9 +12,8 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [blogFormVisible, setBlogFormVisible] = useState(false);
   const blogFormRef = useRef();
-
+  
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
@@ -74,6 +73,16 @@ const App = () => {
     // }, 5000);
   };
 
+  const updateBlog = async (blog) => {
+    try {
+      await blogService.update(blog);
+      const updatedBlogs = await blogService.getAll();
+      setBlogs(updatedBlogs);
+    } catch (error) {
+      console.error('Error updating blog:', error.message);
+    }
+  };
+
   return (
     <>
       {!user && (
@@ -116,8 +125,8 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm handleCreate={handleCreate} />
           </Togglable>
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+          {blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
           ))}
         </div>
       )}

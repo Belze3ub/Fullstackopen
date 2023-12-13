@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const blogStyle = {
     border: 'solid',
     borderWidth: 1,
@@ -9,6 +9,11 @@ const Blog = ({ blog }) => {
   };
   const buttonStyle = { marginLeft: 5 };
   const [showMore, setShowMore] = useState(false);
+
+  const handleLike = async () => {
+    const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    await updateBlog(updatedBlog);
+  };
 
   return (
     <div style={blogStyle}>
@@ -22,7 +27,10 @@ const Blog = ({ blog }) => {
         <div>
           <a href={blog.url}>{blog.url}</a>
           <div>
-            likes {blog.likes} <button style={buttonStyle}>like</button>
+            likes {blog.likes}{' '}
+            <button style={buttonStyle} onClick={handleLike}>
+              like
+            </button>
           </div>
           <div>{blog.author}</div>
         </div>
