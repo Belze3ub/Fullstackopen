@@ -24,7 +24,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title}
+        {blog.title} {blog.author}
         <button style={buttonStyle} onClick={() => setShowMore(!showMore)}>
           {showMore ? 'close' : 'view'}
         </button>
@@ -38,7 +38,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
               like
             </button>
           </div>
-          <div>{blog.author}</div>
+          <div>{blog.user.username}</div>
           {blog.user.username === username && (
             <button
               style={{ backgroundColor: 'lightblue' }}
