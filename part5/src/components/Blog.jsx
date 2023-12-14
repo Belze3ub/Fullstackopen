@@ -23,7 +23,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
 
   return (
     <div style={blogStyle}>
-      <div>
+      <div className='blog'>
         {blog.title} {blog.author}
         <button style={buttonStyle} onClick={() => setShowMore(!showMore)}>
           {showMore ? 'close' : 'view'}
