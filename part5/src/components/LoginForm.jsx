@@ -1,4 +1,4 @@
-// import Message from './Message';
+import PropTypes from 'prop-types';
 
 const LoginForm = ({
   handleLogin,
@@ -37,6 +37,16 @@ const LoginForm = ({
       </form>
     </>
   );
+};
+
+LoginForm.displayName = 'LoginForm';
+
+LoginForm.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  setUsername: PropTypes.func.isRequired,
+  setPassword: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

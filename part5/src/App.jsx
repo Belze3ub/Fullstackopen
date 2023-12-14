@@ -76,7 +76,7 @@ const App = () => {
       }, 5000);
     } catch (error) {
       setMessage({
-        content: `There was an error while trying to create new blog.`,
+        content: 'There was an error while trying to create new blog.',
         type: 'bad',
       });
       setTimeout(() => {

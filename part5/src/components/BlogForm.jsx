@@ -1,7 +1,7 @@
 import { useState } from 'react';
 // import Message from './Message';
 
-const BlogForm = ({ handleCreate}) => {
+const BlogForm = ({ handleCreate }) => {
   const [blog, setBlog] = useState({
     title: '',
     author: '',
@@ -19,7 +19,6 @@ const BlogForm = ({ handleCreate}) => {
   };
   return (
     <>
-      {/* {message && <Message message={message} />} */}
       <h2>Create new</h2>
       <form onSubmit={addBlog}>
         <div>
