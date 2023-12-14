@@ -5,6 +5,7 @@ import loginService from './services/login';
 import Message from './components/Message';
 import BlogForm from './components/BlogForm';
 import Togglable from './components/Togglable';
+import LoginForm from './components/LoginForm';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,7 +14,8 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
-  
+  const [loginVisible, setLoginVisible] = useState(false);
+
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
@@ -60,17 +62,27 @@ const App = () => {
   };
 
   const handleCreate = async (blogObject) => {
-    blogFormRef.current.toggleVisibility();
-    await blogService.create(blogObject);
-    const updatedBlogs = await blogService.getAll();
-    setBlogs(updatedBlogs);
-    // setMessage({
-    //   content: `A new blog ${blog.title} by ${blog.author} added.`,
-    //   type: 'ok',
-    // });
-    // setTimeout(() => {
-    //   setMessage(null);
-    // }, 5000);
+    try {
+      blogFormRef.current.toggleVisibility();
+      await blogService.create(blogObject);
+      const updatedBlogs = await blogService.getAll();
+      setBlogs(updatedBlogs);
+      setMessage({
+        content: `A new blog ${blogObject.title} by ${blogObject.author} added.`,
+        type: 'ok',
+      });
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+    } catch (error) {
+      setMessage({
+        content: `There was an error while trying to create new blog.`,
+        type: 'bad',
+      });
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+    }
   };
 
   const updateBlog = async (blog) => {
@@ -91,43 +103,34 @@ const App = () => {
     } catch (error) {
       console.log('Error deleting blog', error.message);
     }
-  }
+  };
 
   return (
     <>
+      {message && <Message message={message} />}
       {!user && (
         <>
-          <h1>Log in to application</h1>
-          {message && <Message message={message} />}
-          <form onSubmit={handleLogin}>
-            <div>
-              <label htmlFor="username">username</label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                name="Username"
-                onChange={(e) => setUsername(e.target.value)}
+          {!loginVisible && (
+            <button onClick={() => setLoginVisible(true)}>log in</button>
+          )}
+          {loginVisible && (
+            <>
+              <LoginForm
+                handleLogin={handleLogin}
+                username={username}
+                password={password}
+                setUsername={setUsername}
+                setPassword={setPassword}
               />
-            </div>
-            <div>
-              <label htmlFor="password">password</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                name="Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button type="submit">login</button>
-          </form>
+              <button onClick={() => setLoginVisible(false)}>cancel</button>
+            </>
+          )}
         </>
       )}
       {user && (
         <div>
           <h2>blogs</h2>
-          {message && <Message message={message} />}
+          {/* {message && <Message message={message} />} */}
           <p>
             {`${user.username} logged in`}{' '}
             <button onClick={handleLogout}>logout</button>
