@@ -42,3 +42,28 @@ test('renders URL and likes when the "view" button is clicked', () => {
   expect(screen.queryByText(blog.url)).toBeInTheDocument();
   expect(screen.queryByText(`likes ${blog.likes}`)).toBeInTheDocument();
 });
+
+test('fires callback function twice if like button is clicked twice', () => {
+  const updateBlog = jest.fn();
+
+  const blog = {
+    title: 'fullstackopen',
+    author: 'unknown',
+    url: 'www.google.com',
+    likes: 3,
+    user: {
+      username: 'test',
+    },
+  };
+
+  render(<Blog blog={blog} updateBlog={updateBlog} />);
+
+  fireEvent.click(screen.getByText('view'));
+
+  const likeButton = screen.getByText('like');
+
+  fireEvent.click(likeButton)
+  fireEvent.click(likeButton)
+
+  expect(updateBlog.mock.calls).toHaveLength(2);
+});
