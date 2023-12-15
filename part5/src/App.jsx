@@ -14,7 +14,7 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
-  const [loginVisible, setLoginVisible] = useState(false);
+  // const [loginVisible, setLoginVisible] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -108,29 +108,19 @@ const App = () => {
   return (
     <>
       {message && <Message message={message} />}
+      <h1>Blog App</h1>
       {!user && (
-        <>
-          {!loginVisible && (
-            <button onClick={() => setLoginVisible(true)}>log in</button>
-          )}
-          {loginVisible && (
-            <>
-              <LoginForm
-                handleLogin={handleLogin}
-                username={username}
-                password={password}
-                setUsername={setUsername}
-                setPassword={setPassword}
-              />
-              <button onClick={() => setLoginVisible(false)}>cancel</button>
-            </>
-          )}
-        </>
+        <LoginForm
+          handleLogin={handleLogin}
+          username={username}
+          password={password}
+          setUsername={setUsername}
+          setPassword={setPassword}
+        />
       )}
       {user && (
         <div>
           <h2>blogs</h2>
-          {/* {message && <Message message={message} />} */}
           <p>
             {`${user.username} logged in`}{' '}
             <button onClick={handleLogout}>logout</button>

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import Message from './Message';
 
 const BlogForm = ({ handleCreate }) => {
   const [blog, setBlog] = useState({
@@ -51,7 +50,7 @@ const BlogForm = ({ handleCreate }) => {
             onChange={(e) => setBlog({ ...blog, url: e.target.value })}
           />
         </div>
-        <button type="submit">create</button>
+        <button id='createBtn' type="submit">create</button>
       </form>
     </>
   );

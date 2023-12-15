@@ -10,7 +10,6 @@ const LoginForm = ({
 }) => {
   return (
     <>
-      {/* {message && <Message message={message} />} */}
       <h1>Log in to application</h1>
       <form onSubmit={handleLogin}>
         <div>
@@ -33,7 +32,7 @@ const LoginForm = ({
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <button id='loginBtn' type="submit">login</button>
       </form>
     </>
   );
