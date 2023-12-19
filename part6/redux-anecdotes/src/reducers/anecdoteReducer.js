@@ -18,6 +18,7 @@ const asObject = (anecdote) => {
 };
 
 const initialState = anecdotesAtStart.map(asObject);
+// const initialState = {...anecdotesAtStart.map(asObject), filter: ''};
 
 const reducer = (state = initialState, action) => {
   switch(action.type) {
