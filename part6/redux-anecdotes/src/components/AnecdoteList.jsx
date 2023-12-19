@@ -18,7 +18,7 @@ const AnecdoteList = () => {
   return (
     <div>
       {anecdotes
-        .sort((a, b) => b.votes - a.votes)
+        .toSorted((a, b) => b.votes - a.votes)
         .map((anecdote) => (
           <Anecdote key={anecdote.id} anecdote={anecdote} handleClick={() => vote(anecdote.id)} />
         ))}
