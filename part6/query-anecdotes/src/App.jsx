@@ -21,9 +21,9 @@ const App = () => {
         <p>Anecdote service not available due to problems in server</p>
       ) : (
         <>
-          <Notification />
           <h3>Anecdote app</h3>
 
+          <Notification />
           <AnecdoteForm />
           <AnecdoteList anecdotes={anecdotes} />
           {/* {anecdotes.map((anecdote) => (

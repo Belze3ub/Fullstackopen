@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useRef } from 'react';
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
@@ -19,8 +19,29 @@ export const NotificationContextProvider = ({ children }) => {
     ''
   );
 
+  const timeoutRef = useRef(null);
+
+  const setNotificationMessage = (message) => {
+    notificationDispatch({
+      type: 'SET_NOTIFICATION',
+      payload: message,
+    });
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(
+      () =>
+        notificationDispatch({
+          type: 'REMOVE_NOTIFICATION',
+        }),
+      5000
+    );
+  };
+
   return (
-    <NotificationContext.Provider value={[notification, notificationDispatch]}>
+    <NotificationContext.Provider
+      value={[notification, setNotificationMessage]}
+    >
       {children}
     </NotificationContext.Provider>
   );
