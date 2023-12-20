@@ -10,7 +10,6 @@ const App = () => {
     queryFn: getAnecdotes,
   });
 
-  // console.log(JSON.parse(JSON.stringify(result)));
   if (result.isLoading) return <p>Loading...</p>;
   const anecdotes = result.data;
   const error = result.error;
@@ -22,9 +21,9 @@ const App = () => {
         <p>Anecdote service not available due to problems in server</p>
       ) : (
         <>
+          <Notification />
           <h3>Anecdote app</h3>
 
-          <Notification />
           <AnecdoteForm />
           <AnecdoteList anecdotes={anecdotes} />
           {/* {anecdotes.map((anecdote) => (
