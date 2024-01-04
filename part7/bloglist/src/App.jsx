@@ -8,6 +8,9 @@ import LoginForm from './components/LoginForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { initializeBlogs } from './reducers/blogReducer';
 import { login, logout, setUser } from './reducers/userReducer';
+import { Link, Route, Routes } from 'react-router-dom';
+import BlogsPage from './components/BlogsPage';
+import UsersPage from './components/UsersPage/UsersPage';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -16,33 +19,41 @@ const App = () => {
   const user = useSelector((state) => state.user);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const blogFormRef = useRef();
+  // const blogFormRef = useRef();
 
   useEffect(() => {
     dispatch(initializeBlogs());
-  }, [])
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      dispatch(setUser(user))
+      dispatch(setUser(user));
       blogService.setToken(user.token);
     }
   }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    dispatch(login(username, password))
+    dispatch(login(username, password));
   };
 
   const handleLogout = () => {
-    dispatch(logout())
+    dispatch(logout());
     location.reload();
   };
 
   return (
     <>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/users">Users</Link>
+        </li>
+      </ul>
       {notification && <Notification notification={notification} />}
       <h1>Blog App</h1>
       {!user && (
@@ -56,12 +67,11 @@ const App = () => {
       )}
       {user && (
         <div>
-          <h2>blogs</h2>
           <p>
             {`${user.username} logged in`}{' '}
             <button onClick={handleLogout}>logout</button>
           </p>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          {/* <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm />
           </Togglable>
           {blogs
@@ -73,6 +83,11 @@ const App = () => {
                 username={user.username}
               />
             ))}
+        </div> */}
+          <Routes>
+            <Route path="/" element={<BlogsPage user={user} blogs={blogs} />} />
+            <Route path="/users" element={<UsersPage />} />
+          </Routes>
         </div>
       )}
     </>
