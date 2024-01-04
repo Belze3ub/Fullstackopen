@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteBlog, upvoteBlog } from '../reducers/blogReducer';
 
-const Blog = ({ blog, updateBlog, username }) => {
+const Blog = ({ blog, username }) => {
   const dispatch =  useDispatch();
   const blogStyle = {
     border: 'solid',
