@@ -11,7 +11,6 @@ const BlogForm = () => {
       url: e.target.url.value,
     }
     dispatch(createBlog(newBlog));
-    // handleCreate(newBlog)
   }
   return (
     <>

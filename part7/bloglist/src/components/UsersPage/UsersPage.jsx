@@ -1,15 +1,8 @@
-import { useEffect, useState } from 'react';
-import usersService from '../../services/users';
-import './UsersPage.css'
+import './UsersPage.css';
+import { Link } from 'react-router-dom';
 
-const UsersPage = () => {
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    (async () => {
-      const allUsers = await usersService.getAll();
-      setUsers(allUsers);
-    })();
-  }, []);
+const UsersPage = ({ users }) => {
+  if (!users) return null;
   return (
     <>
       <h2>Users</h2>
@@ -23,7 +16,9 @@ const UsersPage = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user.username}>
-              <td>{user.username}</td>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.username}</Link>
+              </td>
               <td>{user.blogs.length}</td>
             </tr>
           ))}

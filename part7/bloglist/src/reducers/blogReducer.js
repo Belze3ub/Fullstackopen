@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import blogService from '../services/blogs';
 import { setNotificationMessage } from './notificationReducer';
+import { getAllUsers } from './usersReducer';
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -9,9 +10,6 @@ const blogSlice = createSlice({
     setBlogs(state, action) {
       return action.payload;
     },
-    // addBlog(state, action) {
-    //   state.push(action.payload)
-    // }
   },
 });
 
@@ -31,6 +29,7 @@ export const createBlog = (blog) => {
       const updatedBlogs = await blogService.getAll();
 
       dispatch(setBlogs(updatedBlogs));
+      dispatch(getAllUsers())
 
       dispatch(
         setNotificationMessage(
@@ -45,13 +44,12 @@ export const createBlog = (blog) => {
       dispatch(
         setNotificationMessage(
           {
-            content: 'There was an error while trying to create a new blog.',
+            content: `There was an error while trying to create a new blog. Error: ${error.message}`,
             type: 'bad',
           },
           5
         )
       );
-      console.error(`Error creating blog: ${error.message}`);
     }
   };
 };
@@ -62,6 +60,7 @@ export const deleteBlog = (blogId) => {
       await blogService.deleteBlog(blogId);
       const updatedBlogs = await blogService.getAll();
       dispatch(setBlogs(updatedBlogs));
+      dispatch(getAllUsers());
       dispatch(
         setNotificationMessage(
           {
