@@ -13,10 +13,15 @@ const notificationSlice = createSlice({
   },
 });
 
+let notificationTimeoutId;
 export const setNotificationMessage = (message, duration) => {
   return async (dispatch) => {
     dispatch(setNotification(message));
-    setTimeout(() => dispatch(removeNotification()), duration * 1000);
+    if (notificationTimeoutId) clearTimeout(notificationTimeoutId);
+    notificationTimeoutId = setTimeout(
+      () => dispatch(removeNotification()),
+      duration * 1000
+    );
   };
 };
 
