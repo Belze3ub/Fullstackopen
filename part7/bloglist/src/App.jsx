@@ -8,19 +8,20 @@ import Togglable from './components/Togglable';
 import LoginForm from './components/LoginForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotificationMessage } from './reducers/notificationReducer';
+import { initializeBlogs } from './reducers/blogReducer';
 
 const App = () => {
   const dispatch = useDispatch();
   const notification = useSelector((state) => state.notification);
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector((state) => state.blogs);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    dispatch(initializeBlogs());
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
@@ -70,39 +71,11 @@ const App = () => {
     location.reload();
   };
 
-  const handleCreate = async (blogObject) => {
-    try {
-      blogFormRef.current.toggleVisibility();
-      await blogService.create(blogObject);
-      const updatedBlogs = await blogService.getAll();
-      setBlogs(updatedBlogs);
-      dispatch(
-        setNotificationMessage(
-          {
-            content: `A new blog ${blogObject.title} by ${blogObject.author} added.`,
-            type: 'ok',
-          },
-          5
-        )
-      );
-    } catch (error) {
-      dispatch(
-        setNotificationMessage(
-          {
-            content: 'There was an error while trying to create new blog.',
-            type: 'bad',
-          },
-          5
-        )
-      );
-    }
-  };
-
   const updateBlog = async (blog) => {
     try {
       await blogService.update(blog);
       const updatedBlogs = await blogService.getAll();
-      setBlogs(updatedBlogs);
+      // setBlogs(updatedBlogs);
       dispatch(
         setNotificationMessage(
           {
@@ -117,15 +90,15 @@ const App = () => {
     }
   };
 
-  const deleteBlog = async (blogId) => {
-    try {
-      await blogService.deleteBlog(blogId);
-      const updatedBlogs = await blogService.getAll();
-      setBlogs(updatedBlogs);
-    } catch (error) {
-      console.log('Error deleting blog', error.message);
-    }
-  };
+  // const deleteBlog = async (blogId) => {
+  //   try {
+  //     await blogService.deleteBlog(blogId);
+  //     const updatedBlogs = await blogService.getAll();
+  //     // setBlogs(updatedBlogs);
+  //   } catch (error) {
+  //     console.log('Error deleting blog', error.message);
+  //   }
+  // };
 
   return (
     <>
@@ -148,16 +121,16 @@ const App = () => {
             <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm handleCreate={handleCreate} />
+            <BlogForm />
           </Togglable>
           {blogs
-            .sort((a, b) => b.likes - a.likes)
+            .toSorted((a, b) => b.likes - a.likes)
             .map((blog) => (
               <Blog
                 key={blog.id}
                 blog={blog}
                 updateBlog={updateBlog}
-                deleteBlog={deleteBlog}
+                // deleteBlog={deleteBlog}
                 username={user.username}
               />
             ))}

@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteBlog, upvoteBlog } from '../reducers/blogReducer';
 
-const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
+const Blog = ({ blog, updateBlog, username }) => {
+  const dispatch =  useDispatch();
   const blogStyle = {
     border: 'solid',
     borderWidth: 1,
@@ -12,12 +15,13 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
 
   const handleLike = async () => {
     const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
-    await updateBlog(updatedBlog);
+    // await updateBlog(updatedBlog);
+    dispatch(upvoteBlog(updatedBlog));
   };
 
-  const handleRemove = async () => {
+  const handleRemove = () => {
     if (confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      await deleteBlog(blog.id);
+      dispatch(deleteBlog(blog.id))
     } else return null;
   };
 
