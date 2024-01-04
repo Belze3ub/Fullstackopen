@@ -10,6 +10,7 @@ import BlogsPage from './components/BlogsPage';
 import UsersPage from './components/UsersPage/UsersPage';
 import UserPage from './components/UserPage';
 import { getAllUsers } from './reducers/usersReducer';
+import BlogPage from './components/BlogPage';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const App = () => {
     }
   }, []);
 
-  const handleLogin = async (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
     dispatch(login(username, password));
   };
@@ -69,9 +70,10 @@ const App = () => {
             <button onClick={handleLogout}>logout</button>
           </p>
           <Routes>
-            <Route path="/" element={<BlogsPage user={user} blogs={blogs} />} />
+            <Route path="/" element={<BlogsPage blogs={blogs} />} />
             <Route path="/users" element={<UsersPage users={users} />} />
             <Route path="/users/:id" element={<UserPage users={users} />} />
+            <Route path="/blogs/:id" element={<BlogPage blogs={blogs} user={user} />} />
           </Routes>
         </div>
       )}

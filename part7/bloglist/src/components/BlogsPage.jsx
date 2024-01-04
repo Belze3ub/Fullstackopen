@@ -3,7 +3,7 @@ import BlogForm from './BlogForm';
 import Togglable from './Togglable';
 import Blog from './Blog';
 
-const BlogsPage = ({ blogs, user }) => {
+const BlogsPage = ({ blogs }) => {
   const blogFormRef = useRef();
   return (
     <>
@@ -14,7 +14,7 @@ const BlogsPage = ({ blogs, user }) => {
       {blogs
         .toSorted((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} username={user.username} />
+          <Blog key={blog.id} blog={blog} />
         ))}
     </>
   );
