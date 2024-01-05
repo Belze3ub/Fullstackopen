@@ -113,4 +113,12 @@ export const upvoteBlog = (blog) => {
   };
 };
 
+export const addComment = (blogId, comment) => {
+  return async dispatch => {
+    await blogService.addComment(blogId, comment);
+    const updatedBlogs = await blogService.getAll();
+    dispatch(setBlogs(updatedBlogs));
+  }
+}
+
 export default blogSlice.reducer;

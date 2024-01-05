@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { deleteBlog, upvoteBlog } from '../reducers/blogReducer';
+import Comments from './Comments';
 
 const BlogPage = ({ blogs, user }) => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const BlogPage = ({ blogs, user }) => {
           remove
         </button>
       )}
+      <Comments blog={blog} />
     </>
   );
 };

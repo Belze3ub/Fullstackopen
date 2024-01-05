@@ -5,7 +5,6 @@ import Blog from './Blog';
 
 const BlogsPage = ({ blogs }) => {
   const blogFormRef = useRef();
-  console.log(blogs)
   return (
     <>
       <h2>Blogs</h2>

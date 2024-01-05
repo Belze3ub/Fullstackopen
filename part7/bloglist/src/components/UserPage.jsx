@@ -9,7 +9,7 @@ const UserPage = ({ users }) => {
       <h2>{user.username}</h2>
       <h3>Added blogs</h3>
       {!user.blogs.length ? (
-        'This user has no blogs'
+        <p>This user has no blogs</p>
       ) : (
         <ul>
           {user.blogs.map((blog) => (
