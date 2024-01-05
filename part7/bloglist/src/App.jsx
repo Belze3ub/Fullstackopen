@@ -35,7 +35,7 @@ const App = () => {
     <>
       <Navbar username={user.username} />
       {notification && <Notification notification={notification} />}
-      <h1>Blog App</h1>
+      <h1 className='text-3xl font-bold'>Blog App</h1>
       {!user && (
         <LoginForm />
       )}

@@ -34,7 +34,7 @@ export const createBlog = (blog) => {
       dispatch(
         setNotificationMessage(
           {
-            content: `A new blog ${newBlog.title} by ${newBlog.author} added.`,
+            content: `A new blog '${newBlog.title}' by ${newBlog.author} added.`,
             type: 'ok',
           },
           5

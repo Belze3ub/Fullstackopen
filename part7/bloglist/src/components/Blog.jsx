@@ -1,19 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Button } from './ui/button';
+import { GanttChartSquare } from 'lucide-react';
 
-const Blog = ({ blog, username }) => {
-  const blogStyle = {
-    border: 'solid',
-    borderWidth: 1,
-    marginBlock: 5,
-    padding: 5,
-  };
-
+const Blog = ({ blog }) => {
   return (
-    <div style={blogStyle}>
-      <div className="blog">
-        <Link to={`blogs/${blog.id}`}>
-          {blog.title} {blog.author}
-        </Link>
+    <div className="flex border items-center my-2">
+      <GanttChartSquare />
+      <div>
+        <Button variant="link">
+          {blog.title} by {blog.author}
+        </Button>
       </div>
     </div>
   );

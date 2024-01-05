@@ -1,5 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { createBlog } from '../reducers/blogReducer';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { Label } from '@radix-ui/react-label';
+import { DialogClose, DialogFooter } from './ui/dialog';
 
 const BlogForm = () => {
   const dispatch = useDispatch();
@@ -9,40 +13,35 @@ const BlogForm = () => {
       title: e.target.title.value,
       author: e.target.author.value,
       url: e.target.url.value,
-    }
+    };
     dispatch(createBlog(newBlog));
-  }
+  };
   return (
-    <>
-      <h2>Create new</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Title</label>
-          <input
-            id="title"
-            type="text"
-            name="title"
-          />
-        </div>
-        <div>
-          <label htmlFor="author">Author</label>
-          <input
-            id="author"
-            type="text"
-            name="author"
-          />
-        </div>
-        <div>
-          <label htmlFor="url">Url</label>
-          <input
-            id="url"
-            type="text"
-            name="url"
-          />
-        </div>
-        <button id='createBtn' type="submit">create</button>
-      </form>
-    </>
+    <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label htmlFor="title" className="text-right">
+          Title
+        </Label>
+        <Input id="title" defaultValue="" className="col-span-3" />
+      </div>
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label htmlFor="author" className="text-right">
+          Author
+        </Label>
+        <Input id="author" defaultValue="" className="col-span-3" />
+      </div>
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label htmlFor="url" className="text-right">
+          Url
+        </Label>
+        <Input id="url" defaultValue="" className="col-span-3" />
+      </div>
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button type="submit">Create</Button>
+        </DialogClose>
+      </DialogFooter>
+    </form>
   );
 };
 

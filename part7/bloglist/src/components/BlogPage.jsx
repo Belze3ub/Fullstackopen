@@ -2,6 +2,8 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { deleteBlog, upvoteBlog } from '../reducers/blogReducer';
 import Comments from './Comments';
+import { Button } from './ui/button';
+import { Heart, Trash2 } from 'lucide-react';
 
 const BlogPage = ({ blogs, user }) => {
   const dispatch = useDispatch();
@@ -27,20 +29,34 @@ const BlogPage = ({ blogs, user }) => {
 
   return (
     <>
-      <h2>{blog.title} {blog.author}</h2>
-      <a href={blog.url}>{blog.url}</a>
-      <div>
-        {blog.likes} {blog.likes === 1 ? 'like' : 'likes'}
-        <button onClick={handleLike} style={{ marginLeft: '.5rem' }}>
-          like
-        </button>
+      <div className="shadow-md p-3 flex flex-col gap-2">
+        <h2 className="font-bold text-2xl">{blog.title}</h2>
+        <a href={blog.url} className="text-blue-600 hover:underline">
+          {blog.url}
+        </a>
+        <div className="text-gray-500">Author: {blog.author}</div>
+        <div>
+          Added by: <span className="font-bold">{user.username}</span>
+        </div>
+        <div className="flex gap-1 items-center">
+          <Heart color="red" size={'1rem'} />
+          {blog.likes} {blog.likes === 1 ? 'like' : 'likes'}
+        </div>
+        <div className='flex gap-2'>
+          <Button onClick={handleLike} variant="outline">
+            <div className="flex items-center">
+              <Heart className="h-4 w-4 mr-1" />
+              Like
+            </div>
+          </Button>
+          {blog.user.username === user.username && (
+            <Button variant="outline" onClick={handleRemove}>
+              <Trash2 className="h-4 w-4 mr-1" />
+              Delete
+            </Button>
+          )}
+        </div>
       </div>
-      <div>added by {user.username}</div>
-      {blog.user.username === user.username && (
-        <button style={{ backgroundColor: 'lightblue' }} onClick={handleRemove}>
-          remove
-        </button>
-      )}
       <Comments blog={blog} />
     </>
   );
