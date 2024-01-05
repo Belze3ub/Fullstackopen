@@ -8,13 +8,17 @@ const UserPage = ({ users }) => {
     <>
       <h2>{user.username}</h2>
       <h3>Added blogs</h3>
-      <ul>
-        {user.blogs.map((blog) => (
-          <li key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
-        ))}
-      </ul>
+      {!user.blogs.length ? (
+        'This user has no blogs'
+      ) : (
+        <ul>
+          {user.blogs.map((blog) => (
+            <li key={blog.id}>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 };

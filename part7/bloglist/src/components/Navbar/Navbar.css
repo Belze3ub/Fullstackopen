@@ -1,0 +1,22 @@
+.navbar-container {
+  background: lightgray;
+  display: flex;
+  justify-content: space-between;
+  padding-inline: .5rem;
+}
+
+.navbar-navigation {
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+}
+
+.navbar-navigation {
+  li {
+    list-style: none;
+    padding-block: 0;
+  }
+  a {
+    text-decoration: none;
+  }
+}
