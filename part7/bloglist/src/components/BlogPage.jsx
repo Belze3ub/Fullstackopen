@@ -26,7 +26,7 @@ const BlogPage = ({ blogs, user }) => {
 
   return (
     <>
-      <h2>{blog.title}</h2>
+      <h2>{blog.title} {blog.author}</h2>
       <a href={blog.url}>{blog.url}</a>
       <div>
         {blog.likes} {blog.likes === 1 ? 'like' : 'likes'}
@@ -34,7 +34,7 @@ const BlogPage = ({ blogs, user }) => {
           like
         </button>
       </div>
-      <div>added by {blog.author}</div>
+      <div>added by {user.username}</div>
       {blog.user.username === user.username && (
         <button style={{ backgroundColor: 'lightblue' }} onClick={handleRemove}>
           remove
