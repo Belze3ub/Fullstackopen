@@ -35,44 +35,46 @@ const App = () => {
   return (
     <>
       <Navbar user={user} />
-      {notification && <Notification notification={notification} />}
-      <h1 className="text-3xl font-bold">Blog App</h1>
-      <div>
-        <Routes>
-          <>
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/register" element={<RegisterForm />} />
+      <div className="container">
+        {notification && <Notification notification={notification} />}
+        <h1 className="text-3xl font-bold">Blog App</h1>
+        <div>
+          <Routes>
+            <>
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/register" element={<RegisterForm />} />
 
-            <Route
-              path="/"
-              element={
-                user ? <BlogsPage blogs={blogs} /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/users"
-              element={
-                user ? <UsersPage users={users} /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/users/:id"
-              element={
-                user ? <UserPage users={users} /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/blogs/:id"
-              element={
-                user ? (
-                  <BlogPage blogs={blogs} user={user} />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-          </>
-        </Routes>
+              <Route
+                path="/"
+                element={
+                  user ? <BlogsPage blogs={blogs} /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  user ? <UsersPage users={users} /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/users/:id"
+                element={
+                  user ? <UserPage users={users} /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/blogs/:id"
+                element={
+                  user ? (
+                    <BlogPage blogs={blogs} user={user} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
+            </>
+          </Routes>
+        </div>
       </div>
     </>
   );
