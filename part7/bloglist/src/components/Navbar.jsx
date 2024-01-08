@@ -1,14 +1,14 @@
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../../reducers/userReducer';
-import { Button } from '../ui/button';
+import { logout } from '../reducers/userReducer';
+import { Button } from './ui/button';
 
 const Navbar = ({ user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login')
+    navigate('/login');
   };
   return (
     <>
@@ -16,14 +16,14 @@ const Navbar = ({ user }) => {
         <div className="font-bold ">BlogApp</div>
         <ul className="flex gap-2">
           <li>
-            <Link to='/'>
+            <Link to="/">
               <Button variant="link" className="text-slate-100">
                 Home
               </Button>
             </Link>
           </li>
           <li>
-            <Link to='/users'>
+            <Link to="/users">
               <Button variant="link" className="text-slate-100">
                 Users
               </Button>

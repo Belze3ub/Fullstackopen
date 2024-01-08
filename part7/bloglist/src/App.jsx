@@ -11,7 +11,7 @@ import UsersPage from './components/UsersPage/UsersPage';
 import UserPage from './components/UserPage';
 import { getAllUsers } from './reducers/usersReducer';
 import BlogPage from './components/BlogPage';
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './components/Navbar';
 import RegisterForm from './components/RegisterForm';
 
 const App = () => {
@@ -30,7 +30,7 @@ const App = () => {
       dispatch(setUser(user));
       blogService.setToken(user.token);
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
