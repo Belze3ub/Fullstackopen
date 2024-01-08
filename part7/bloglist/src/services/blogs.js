@@ -1,6 +1,6 @@
 import axios from 'axios';
 // const baseUrl = '/api/blogs';
-const baseUrl = 'http://localhost:3000/api/blogs';
+const baseUrl = 'https://blogapp-zbgm.onrender.com/api/blogs';
 
 let token = null;
 

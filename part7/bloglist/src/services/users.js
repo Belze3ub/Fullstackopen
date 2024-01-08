@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:3000/api/users';
+const baseUrl = 'https://blogapp-zbgm.onrender.com/api/users';
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
