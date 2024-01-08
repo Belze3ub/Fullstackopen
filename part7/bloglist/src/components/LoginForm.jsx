@@ -3,15 +3,22 @@ import { useDispatch } from 'react-redux';
 import { login } from '../reducers/userReducer';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    dispatch(login(username, password));
+    try {
+      await dispatch(login(username, password));
+      navigate('/');
+    } catch (error) {
+      console.log(error.message)
+    }
   };
   return (
     <>
@@ -42,7 +49,14 @@ const LoginForm = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button id="loginBtn" className='w-full'>Login</Button>
+          <div className="flex gap-2">
+            <Button id="loginBtn" className="grow">
+              Login
+            </Button>
+            <Button type='button' className="grow" onClick={() => navigate('/register')}>
+              Register
+            </Button>
+          </div>
         </form>
       </div>
     </>

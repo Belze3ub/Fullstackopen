@@ -1,13 +1,14 @@
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../reducers/userReducer';
 import { Button } from '../ui/button';
 
-const Navbar = ({ username }) => {
+const Navbar = ({ user }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
-    location.reload();
+    navigate('/login')
   };
   return (
     <>
@@ -15,23 +16,23 @@ const Navbar = ({ username }) => {
         <div className="font-bold ">BlogApp</div>
         <ul className="flex gap-2">
           <li>
-            <Link to="/">
+            <Link to='/'>
               <Button variant="link" className="text-slate-100">
                 Home
               </Button>
             </Link>
           </li>
           <li>
-            <Link to="/users">
+            <Link to='/users'>
               <Button variant="link" className="text-slate-100">
                 Users
               </Button>
             </Link>
           </li>
         </ul>
-        {username && (
-          <p>
-            {`${username} logged in`}{' '}
+        {user ? (
+          <div className="flex gap-2 items-center">
+            <em>{user.username} logged in</em>
             <Button
               onClick={handleLogout}
               variant="link"
@@ -39,7 +40,20 @@ const Navbar = ({ username }) => {
             >
               logout
             </Button>
-          </p>
+          </div>
+        ) : (
+          <div>
+            <Link to="/login">
+              <Button variant="link" className="text-slate-100">
+                Login
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button variant="link" className="text-slate-100">
+                Register
+              </Button>
+            </Link>
+          </div>
         )}
       </div>
     </>

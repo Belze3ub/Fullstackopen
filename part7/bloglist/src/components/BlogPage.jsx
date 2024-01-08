@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { deleteBlog, upvoteBlog } from '../reducers/blogReducer';
 import Comments from './Comments';
 import { Button } from './ui/button';
@@ -20,6 +20,7 @@ const BlogPage = ({ blogs, user }) => {
   const dispatch = useDispatch();
   const id = useParams().id;
   const blog = blogs.find((blog) => blog.id === id);
+  const navigate = useNavigate();
 
   const handleLike = () => {
     const updatedBlog = {
@@ -32,6 +33,7 @@ const BlogPage = ({ blogs, user }) => {
 
   const handleRemove = () => {
     dispatch(deleteBlog(blog.id));
+    navigate('/')
   };
 
   if (!blog) return null;

@@ -3,9 +3,12 @@ import loginService from '../services/login';
 import blogService from '../services/blogs';
 import { setNotificationMessage } from './notificationReducer';
 
+const initialState =
+  JSON.parse(window.localStorage.getItem('loggedBlogappUser')) || null;
+
 const userSlice = createSlice({
   name: 'user',
-  initialState: '',
+  initialState,
   reducers: {
     setUser(state, action) {
       return action.payload;
@@ -38,12 +41,13 @@ export const login = (username, password) => {
       dispatch(
         setNotificationMessage(
           {
-            content: 'Wrong username or password',
+            content: `There was an error while trying to log in: ${error.response.data.error}`,
             type: 'bad',
           },
           5
         )
       );
+      throw error;
     }
   };
 };
@@ -52,6 +56,15 @@ export const logout = () => {
   return async (dispatch) => {
     window.localStorage.removeItem('loggedBlogappUser');
     dispatch(setUser(null));
+    dispatch(
+      setNotificationMessage(
+        {
+          content: 'Logged out.',
+          type: 'ok',
+        },
+        5
+      )
+    );
   };
 };
 
