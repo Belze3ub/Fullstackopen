@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addComment } from '../reducers/blogReducer';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
 
 const CommentForm = ({ blogId }) => {
   const [comment, setComment] = useState('');
@@ -11,18 +14,21 @@ const CommentForm = ({ blogId }) => {
     const newComment = {
       content: comment,
     };
-    dispatch(addComment(blogId, newComment));
-    setComment('');
+    if (comment) {
+      dispatch(addComment(blogId, newComment));
+      setComment('');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
+    <form onSubmit={handleSubmit} className='mb-2'>
+      <Textarea
         type="text"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
+        placeholder='Enter your comment'
       />
-      <button>Add comment</button>
+      <Button className='w-full mt-2'>Add comment</Button>
     </form>
   );
 };

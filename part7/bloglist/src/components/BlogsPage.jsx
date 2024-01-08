@@ -1,7 +1,13 @@
 import React from 'react';
 import BlogForm from './BlogForm';
 import Blog from './Blog';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 
@@ -23,13 +29,17 @@ const BlogsPage = ({ blogs }) => {
         </Dialog>
       </div>
       <div className="mt-5">
-        {blogs
-          .toSorted((a, b) => b.likes - a.likes)
-          .map((blog) => (
-            <Link key={blog.id} to={`blogs/${blog.id}`}>
-              <Blog blog={blog} />
-            </Link>
-          ))}
+        {!blogs.length ? (
+          <p className='text-center'>No blogs yet</p>
+        ) : (
+          blogs
+            .toSorted((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Link key={blog.id} to={`blogs/${blog.id}`}>
+                <Blog blog={blog} />
+              </Link>
+            ))
+        )}
       </div>
     </>
   );
